@@ -17,7 +17,7 @@
 # File Name : changelogup.py
 # Creation Date : 06-07-2014
 # Created By : Jamie Duncan
-# Last Modified : Sun 08 Jun 2014 10:14:27 AM EDT
+# Last Modified : Sun 08 Jun 2014 11:12:19 AM EDT
 # Purpose : for converting a git log stanza into a usable spec file changelog
 
 import subprocess
@@ -76,7 +76,10 @@ class CLData:
         # if it's not it just prints the commit line
         new_release = False
         if 'HEAD' in tag:
-            tag = "- %s" % 'HEAD:UNRELEASED'
+            if 'tag' in tag:
+                tag = "- %s" % tag.split(':')[1].strip(' ()').split(',')[0] 
+            else:
+                tag = "- %s" % 'HEAD:UNRELEASED'
             new_release = True
         if 'tag' in tag:
             tag = "- %s" % tag.split(':')[1].strip(' ()')
@@ -87,7 +90,7 @@ class CLData:
     def _getGitLog(self):
         #grabs the raw git log data from the given repo
 
-        git_command = 'git --no-pager log %s..%s --pretty --format=\'%%cD,%%cn,%%ce,%%h,"%%s",%%d\'' % (self.t_start, self.t_end)
+        git_command = 'git --no-pager log %s..%s --pretty --format=\'%%cD,%%cn,%%ce,%%h,"%%s","%%d"\'' % (self.t_start, self.t_end)
         if self.repo:
             cl_raw = subprocess.Popen(git_command,shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.repo)
         else:
