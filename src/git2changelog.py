@@ -17,7 +17,7 @@
 # File Name : changelogup.py
 # Creation Date : 06-07-2014
 # Created By : Jamie Duncan
-# Last Modified : Sun 08 Jun 2014 06:50:06 AM EDT
+# Last Modified : Sun 08 Jun 2014 10:14:27 AM EDT
 # Purpose : for converting a git log stanza into a usable spec file changelog
 
 import subprocess
@@ -48,15 +48,12 @@ class CLData:
         self.search_term = options.search_term  #option search term to limit commit output
         self.repo = options.repo    #git repo directory to run against - defaults to curr working directory
 
-        if not self.repo:   #you must specify a -r option
-            raise InvalidRepositoryError("You Must Specify a Valid git Repository to Analyze. Please Verify.")
-
         self._checkRepository()
         self._checkTags()
 
     def _checkRepository(self):
         if not os.path.isdir(os.path.join(self.repo, '.git')):
-            raise InvalidRepositoryError("The Directory Does Not Appear to be a Valid git Repository")
+            raise InvalidRepositoryError("%s Does Not Appear to be a Valid git Repository" % self.repo)
 
     def _checkTags(self):
         #the logic here: if you don't have any tagged releases you should not be creating a spec file.

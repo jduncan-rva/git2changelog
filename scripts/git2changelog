@@ -22,11 +22,9 @@
 # Last Modified : Sun 08 Jun 2014 05:58:37 AM EDT
 # Purpose : executable for converting a git log stanza into a usable spec file changelog
 
-import subprocess
-import csv
-from dateutil.parser import parse
 from optparse import OptionParser
 from git2changelog import CLData
+import os
 
 def main():
 
@@ -37,6 +35,8 @@ def main():
     parser.add_option("-r", "--repo", default=None, dest="repo", help="Repository to Scan (default is the current directory)", metavar="REPO")
 
     (options, args) = parser.parse_args()
+    if options.repo is None:
+        options.repo = os.getcwd()
     clog = CLData(options)
     clog.formatChangeLog()
 

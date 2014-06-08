@@ -1,7 +1,7 @@
 Summary: To convert git logs into formatted changelog entries
 Name: git2changelog
 Version: 0.1
-Release: 1%{dist}
+Release: 2%{dist}
 Source0: http://people.redhat.com/jduncan/%{name}/%{name}-%{version}.tar.gz
 License: GPLv2
 BuildArch: noarch
@@ -31,5 +31,8 @@ git2changelog analyzes a git repository to create a formatted changelog
 %{_bindir}/%{name}
 
 %changelog
+* Sun Jun 08 2014 Jamie Duncan <jduncan@redhat.com> 0.1-2
+- d5f16db =typo. fixes #1
+
 * Sun Jun 08 2014 Jamie Duncan <jduncan@redhat.com> 0.1-1
 - initial buildout and testing build
