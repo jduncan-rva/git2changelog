@@ -1,0 +1,44 @@
+#!/usr/bin/env python
+# -*- coding: iso-8859-15 -*-
+# Copyright (C) 2014  Jamie Duncan (jduncan@redhat.com)
+
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+# File Name : git2changelog
+# Creation Date : 06-07-2014
+# Created By : Jamie Duncan
+# Last Modified : Sun 08 Jun 2014 05:58:37 AM EDT
+# Purpose : executable for converting a git log stanza into a usable spec file changelog
+
+import subprocess
+import csv
+from dateutil.parser import parse
+from optparse import OptionParser
+from git2changelog import CLData
+
+def main():
+
+    parser = OptionParser(usage="%prog -b [-e -r -s]" )
+    parser.add_option("-b", "--begin_tag", dest="t_start", help="Tag to start data collecton from", metavar="BEGIN_TAG")
+    parser.add_option("-e", "--end_tag", default='HEAD', dest="t_end", help="Tag to end the data collection, default is HEAD", metavar="END_TAG")
+    parser.add_option("-s", "--search", default=None, dest="search_term", help="Commit Search Criteria", metavar="SEARCH_TERM")
+    parser.add_option("-r", "--repo", default=None, dest="repo", help="Repository to Scan (default is the current directory)", metavar="REPO")
+
+    (options, args) = parser.parse_args()
+    clog = CLData(options)
+    clog.formatChangeLog()
+
+if __name__ == '__main__':
+    main()
