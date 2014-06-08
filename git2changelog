@@ -27,6 +27,13 @@ import csv
 from dateutil.parser import parse
 from optparse import OptionParser
 
+#################################
+#
+# Python Module Requirement
+# python-dateutil
+#
+##################################
+
 class CLData:
 
     def __init__(self, options):
