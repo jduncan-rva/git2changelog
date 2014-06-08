@@ -40,6 +40,7 @@ class CLData:
 
         self.t_start = options.t_start  #start tag
         self.t_end = options.t_end    #end tag, defaults to 'HEAD'
+        self.search_term = options.search_term
 
     def _formatDate(self, date):
         #returns the date in the proper format for a changelog in a spec file
@@ -51,6 +52,9 @@ class CLData:
         # if it's a new tag it takes it and prints out the full changelog entry
         # if it's not it just prints the commit line
         new_release = False
+        if 'HEAD' in tag:
+            tag = "- %s" % 'HEAD:UNRELEASED'
+            new_release = True
         if 'tag' in tag:
             tag = "- %s" % tag.split(':')[1].strip(' ()')
             new_release = True
@@ -74,13 +78,17 @@ class CLData:
             if r_check:
                 print "\n* %s %s <%s> %s\n- %s =%s" % (self._formatDate(row[1]),row[2],row[3],release,row[4],row[5])
             else:
-                print "- %s : Commit %s" % (row[5],row[4])
-
+                if self.search_term:    #if we want to limit the output to lines with a certain string in the comment
+                    if self.search_term in row[5]:
+                        print "- %s : Commit %s" % (row[5],row[4])
+                else:   #if we want all of the commits - no search term given
+                    print "- %s : Commit %s" % (row[5],row[4])
 def main():
 
-    parser = OptionParser(usage="%prog -b -e" )
+    parser = OptionParser(usage="%prog -b -e -s -x" )
     parser.add_option("-b", "--begin_tag", dest="t_start", help="Tag to start data collecton from", metavar="BEGIN_TAG")
     parser.add_option("-e", "--end_tag", default='HEAD', dest="t_end", help="Tag to end the data collection, default is HEAD", metavar="END_TAG")
+    parser.add_option("-s", "--search", default=None, dest="search_term", help="Commit Search Criteria", metavar="SEARCH_TERM")
 
     (options, args) = parser.parse_args()
     clog = CLData(options)
