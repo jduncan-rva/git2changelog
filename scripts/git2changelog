@@ -29,11 +29,11 @@ import os
 def main():
 
     parser = OptionParser(usage="%prog -b [-e -r -s]" )
-    parser.add_option("-b", "--begin_tag", dest="t_start", help="Tag to start data collecton from", metavar="BEGIN_TAG")
-    parser.add_option("-e", "--end_tag", default='HEAD', dest="t_end", help="Tag to end the data collection, default is HEAD", metavar="END_TAG")
-    parser.add_option("-s", "--search", default=None, dest="search_term", help="Commit Search Criteria, up to 4 values", metavar="SEARCH_TERM")
-    parser.add_option("-n", "--name", default=None, dest="tag_name", help="New Tag Name for untagged commits", metavar="TAG_NAME")
-    parser.add_option("-r", "--repo", default=None, dest="repo", help="Repository to Scan (default is the current directory)", metavar="REPO")
+    parser.add_option("-b", "--begin_tag", dest="t_start", help="Tag to start data collecton from. required.", metavar="BEGIN_TAG")
+    parser.add_option("-e", "--end_tag", default='HEAD', dest="t_end", help="Tag to end the data collection. defaults to HEAD.", metavar="END_TAG")
+    parser.add_option("-s", "--search", default=None, dest="search_term", help="Commit Search Criteria. optional.", metavar="SEARCH_TERM")
+    parser.add_option("-n", "--name", default=None, dest="tag_name", help="New Tag Name for untagged commits. optional.", metavar="TAG_NAME")
+    parser.add_option("-r", "--repo", default=None, dest="repo", help="Repository to Scan. defaults to current directory.", metavar="REPO")
 
     (options, args) = parser.parse_args()
     if options.repo is None:
