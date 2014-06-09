@@ -17,7 +17,7 @@
 # File Name : changelogup.py
 # Creation Date : 06-07-2014
 # Created By : Jamie Duncan
-# Last Modified : Mon 09 Jun 2014 10:20:27 AM EDT
+# Last Modified : Mon 09 Jun 2014 11:47:29 AM EDT
 # Purpose : for converting a git log stanza into a usable spec file changelog
 
 import subprocess
@@ -49,6 +49,9 @@ class CLData:
         if options.search_term:
             self.search_terms = options.search_term.split(',')  #option search term to limit commit output, is passed as a comma-delimited list
         self.repo = options.repo    #git repo directory to run against - defaults to curr working directory
+        self.tag_name = False
+        if options.tag_name:
+            self.tag_name = options.tag_name
 
         self._checkRepository()
         self._checkTags()
@@ -81,7 +84,10 @@ class CLData:
             if 'tag' in tag:
                 tag = "- %s" % tag.split(':')[1].strip(' ()').split(',')[0] 
             else:
-                tag = "- %s" % 'HEAD:UNRELEASED'
+                if self.tag_name:
+                    tag = "- %s" % self.tag_name
+                else:
+                    tag = "- %s" % 'HEAD:UNRELEASED'
             new_release = True
         if 'tag' in tag:
             tag = "- %s" % tag.split(':')[1].strip(' ()')
