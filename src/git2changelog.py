@@ -17,7 +17,7 @@
 # File Name : changelogup.py
 # Creation Date : 06-07-2014
 # Created By : Jamie Duncan
-# Last Modified : Sun 08 Jun 2014 11:12:19 AM EDT
+# Last Modified : Mon 09 Jun 2014 10:20:27 AM EDT
 # Purpose : for converting a git log stanza into a usable spec file changelog
 
 import subprocess
@@ -45,7 +45,9 @@ class CLData:
 
         self.t_start = options.t_start  #start tag
         self.t_end = options.t_end    #end tag, defaults to 'HEAD'
-        self.search_term = options.search_term  #option search term to limit commit output
+        self.search_terms = False
+        if options.search_term:
+            self.search_terms = options.search_term.split(',')  #option search term to limit commit output, is passed as a comma-delimited list
         self.repo = options.repo    #git repo directory to run against - defaults to curr working directory
 
         self._checkRepository()
@@ -91,10 +93,7 @@ class CLData:
         #grabs the raw git log data from the given repo
 
         git_command = 'git --no-pager log %s..%s --pretty --format=\'%%cD,%%cn,%%ce,%%h,"%%s","%%d"\'' % (self.t_start, self.t_end)
-        if self.repo:
-            cl_raw = subprocess.Popen(git_command,shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.repo)
-        else:
-            cl_raw = subprocess.Popen(git_command,shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        cl_raw = subprocess.Popen(git_command,shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.repo)
 
         return cl_raw.stdout.readlines()
 
@@ -105,10 +104,18 @@ class CLData:
         for row in a:
             r_check,release = self._formatRelease(row[6])
             if r_check:
-                print "\n* %s %s <%s> %s\n- %s =%s" % (self._formatDate(row[1]),row[2],row[3],release,row[4],row[5])
+                print "\n* %s %s <%s> %s" % (self._formatDate(row[1]),row[2],row[3],release)
+                if self.search_terms:
+                    for item in self.search_terms:
+                        if item in row[5]:
+                            print "- %s : Commit %s" % (row[5],row[4])
+                            break
+                else:
+                    print "- %s : Commit %s" % (row[5],row[4])
             else:
-                if self.search_term:    #if we want to limit the output to lines with a certain string in the comment
-                    if self.search_term in row[5]:
-                        print "- %s : Commit %s" % (row[5],row[4])
+                if self.search_terms:    #if we want to limit the output to lines with certain strings in the comment
+                    for item in self.search_terms:
+                        if item in row[5]:
+                            print "- %s : Commit %s" % (row[5],row[4])
                 else:   #if we want all of the commits - no search term given
                     print "- %s : Commit %s" % (row[5],row[4])
