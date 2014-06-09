@@ -1,7 +1,7 @@
 Summary: To convert git logs into formatted changelog entries
 Name: git2changelog
 Version: 0.1
-Release: 4%{dist}
+Release: 5%{dist}
 Source0: http://people.redhat.com/jduncan/%{name}/%{name}-%{version}.tar.gz
 License: GPLv2
 BuildArch: noarch
@@ -31,6 +31,11 @@ git2changelog analyzes a git repository to create a formatted changelog
 %{_bindir}/%{name}
 
 %changelog
+* Mon Jun 09 2014 Jamie Duncan <jduncan@redhat.com> - 0.1-5
+- allows for multiple search terms cleanly. fixes #3 : Commit 8aab0c7
+- adding content to README.md : Commit ce03be7
+- updating spec file to reflect r4 : Commit 723577c
+
 * Sun Jun 08 2014 Jamie Duncan <jduncan@redhat.com> - 0.1-4
 - 08c27e2 =refactored to handle condition where tag was at HEAD properly. fixes #4
 
