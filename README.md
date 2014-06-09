@@ -8,16 +8,18 @@ git2changelog analyzes git repositories to generate formatted changelogs
 git2changelog -r REPO -b BEGIN_TAG [-e END_TAG -s SEARCH_STRING]
 ```
 # Options
-* -b, --begin_tag=BEGIN_TAG
-    the git tag to begin the changelog generation with. this is required since you shouldn't be creating an RPM (and thus a spec file) without a tagged release
+```
+  -h, --help            show this help message and exit
+  -b BEGIN_TAG, --begin_tag=BEGIN_TAG
+                        Tag to start data collecton from. required.
+  -e END_TAG, --end_tag=END_TAG
+                        Tag to end the data collection. defaults to HEAD.
+  -s SEARCH_TERM, --search=SEARCH_TERM
+                        Commit Search Criteria. optional.
+  -n TAG_NAME, --name=TAG_NAME
+                        New Tag Name for untagged commits. optional.
+  -r REPO, --repo=REPO  Repository to Scan. defaults to current directory.
 
-* -e, --end_tag=END_TAG
-    the git tag to stop the changelog generation with. if none is given it gives all entries up through HEAD, and notes that HEAD commits that haven't been tagged are 'Unreleased'
-
-* -r, --repo=REPO
-    the git repository to analyze. this can be a relative or fully-qualified filesystem path, but it must be accessible.
-
-* -s, --search=SEARCH_TERM
-    an optional search term used to limit commits that are output into the changelog. a common use would be limit the changelog to commits that fixed a bugzilla or github issue or similar
+```
 #Mailing Lists
 None Yet
