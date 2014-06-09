@@ -14,6 +14,8 @@ git2changelog -r REPO -b BEGIN_TAG [-e END_TAG -s SEARCH_STRING]
                         Tag to start data collecton from. required.
   -e END_TAG, --end_tag=END_TAG
                         Tag to end the data collection. defaults to HEAD.
+  -f LOG_FORMAT, --log_format=LOG_FORMAT
+                        Format to Generate Changelog. defaults to rpm
   -s SEARCH_TERM, --search=SEARCH_TERM
                         Commit Search Criteria. optional.
   -n TAG_NAME, --name=TAG_NAME

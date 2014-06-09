@@ -17,7 +17,7 @@
 # File Name : changelogup.py
 # Creation Date : 06-07-2014
 # Created By : Jamie Duncan
-# Last Modified : Mon 09 Jun 2014 11:47:29 AM EDT
+# Last Modified : Mon 09 Jun 2014 01:28:56 PM EDT
 # Purpose : for converting a git log stanza into a usable spec file changelog
 
 import subprocess
@@ -52,6 +52,12 @@ class CLData:
         self.tag_name = False
         if options.tag_name:
             self.tag_name = options.tag_name
+
+        #log_format - opens up the ability to have other log formats generated
+        #current supported formats
+        # rpm - the default. and RPM spec file changelog
+
+        self.log_format = options.log_format.lower()
 
         self._checkRepository()
         self._checkTags()
@@ -103,11 +109,11 @@ class CLData:
 
         return cl_raw.stdout.readlines()
 
-    def formatChangeLog(self):
+    def _generateRPMChangeLog(self, data):
+        # RPM Changelog Format Script
+        # called if log_format = 'rpm'
 
-        data = self._getGitLog()
-        a = csv.reader(data)
-        for row in a:
+        for row in data:
             r_check,release = self._formatRelease(row[6])
             if r_check:
                 print "\n* %s %s <%s> %s" % (self._formatDate(row[1]),row[2],row[3],release)
@@ -125,3 +131,10 @@ class CLData:
                             print "- %s : Commit %s" % (row[5],row[4])
                 else:   #if we want all of the commits - no search term given
                     print "- %s : Commit %s" % (row[5],row[4])
+
+    def formatChangeLog(self):
+
+        data = self._getGitLog()
+        raw_data = csv.reader(data)
+        if self.log_format == 'rpm':
+            self._generateRPMChangeLog(raw_data)
